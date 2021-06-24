@@ -3,7 +3,7 @@
  * jQuery plugin for autocompletion
  * 
  * @author Łukasz Pawełczak (http://github.com/pawelczak)
- * @version 1.3.0
+ * @version 1.3.1
  * Copyright MIT License: https://github.com/pawelczak/easy-autocomplete/blob/master/LICENSE.txt
  */
 
@@ -108,7 +108,7 @@ var EasyAutocomplete = (function(scope){
 
 			ajaxSettings: {},
 
-			preparePostData: function(data) {return data;},
+			preparePostData: function(data, inputPhrase) {return data;},
 
 			loggerEnabled: true,
 
@@ -1323,7 +1323,11 @@ var EasyAutocomplete = (function(scope) {
 
 							loadElements(listBuilders, inputPhrase);
 
-							showContainer();
+							if ($field.parent().find("li").length > 0) {
+								showContainer();	
+							} else {
+								hideContainer();
+							}
 
 						}
 
@@ -1342,7 +1346,7 @@ var EasyAutocomplete = (function(scope) {
 
 							settings.url = settings.url(inputPhrase);
 
-							settings.data = config.get("preparePostData")(settings.data);
+							settings.data = config.get("preparePostData")(settings.data, inputPhrase);
 
 							$.ajax(settings) 
 								.done(function(data) {
@@ -1360,10 +1364,11 @@ var EasyAutocomplete = (function(scope) {
 																				
 									}
 
-									if (listBuilderService.checkIfDataExists(listBuilders)) {
-										showContainer();
+									if (listBuilderService.checkIfDataExists(listBuilders) && $field.parent().find("li").length > 0) {
+										showContainer();	
+									} else {
+										hideContainer();
 									}
-
 
 									config.get("ajaxCallback")();
 
@@ -1429,7 +1434,8 @@ var EasyAutocomplete = (function(scope) {
 						if (event.keyCode === 13 && selectedElement > -1) {
 
 							$field.val(config.get("getValue")(elementsList[selectedElement]));
-							//selectedElement = -1;
+
+							// selectedElement = -1;
 							hideContainer();
 
 							config.get("list").onKeyEnterEvent();

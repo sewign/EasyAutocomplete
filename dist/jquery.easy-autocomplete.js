@@ -1429,7 +1429,7 @@ var EasyAutocomplete = (function(scope) {
 						if (event.keyCode === 13 && selectedElement > -1) {
 
 							$field.val(config.get("getValue")(elementsList[selectedElement]));
-							selectedElement = -1;
+							//selectedElement = -1;
 							hideContainer();
 
 							config.get("list").onKeyEnterEvent();
